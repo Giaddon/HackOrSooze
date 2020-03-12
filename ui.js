@@ -8,6 +8,7 @@ $(async function() {
   const $ownStories = $("#my-articles");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
+  const $navSubmit = $("#nav-submit");
 
   // global storyList variable
   let storyList = null;
@@ -35,6 +36,19 @@ $(async function() {
     currentUser = userInstance;
     syncCurrentUserToLocalStorage();
     loginAndSubmitForm();
+  });
+
+  $submitForm.on("submit", async function(evt) {
+    evt.preventDefault();
+    console.log("New story form submitted.")
+    const newStory = {
+      author: $("#author").val(),
+      title: $("#title").val(),
+      url: $("#url").val()
+    }
+    await StoryList.addStory(currentUser, newStory);
+    await generateStories();
+    $submitForm.slideToggle();
   });
 
   /**
@@ -79,7 +93,12 @@ $(async function() {
     $allStoriesList.toggle();
   });
 
-  /**
+  $navSubmit.on("click", function() {
+    console.log("Ya clicked the submit button!");
+     $submitForm.slideToggle();
+
+  });
+    /**
    * Event handler for Navigation to Homepage
    */
 
